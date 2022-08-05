@@ -1,58 +1,137 @@
 // En primer lugar voy a preguntar al usuario su nombre y que día de la semana es.
 //Se crea una variable descuento para almacenar el mismo en caso de que exista.
 let nombre = prompt ("Ingrese su nombre.")
-let dia = prompt("Bienvenido " + nombre + " que día es hoy?");
-let descuento = 0;
+console.log ("Bienvenido " + nombre + "!")
 
 
-// Los días lunes(descuento del 15%), miércoles(descuento del 30%) y viernes(descuento del 20%). 
-if ((dia == "lunes") || (dia == "LUNES") || (dia == "Lunes")){
-    descuento = 0.15;
-    alert ("Todos los lunes tenes un 15% de descuento en productos de almacen!")
-} else if ((dia == "miercoles") || (dia == "MIERCOLES") || (dia == "Miercoles")){
-    descuento = 0.30;
-    alert ("Todos los miercoles tenes un 30% de descuento en productos de almacen!")
-} else if ((dia == "viernes")||(dia == "VIERNES")||(dia =="Viernes")){
-    descuento = 0.20;
-    alert ("Todos los viernes tenes un 20% de descuento en productos de almacen!")
-} else {
-    console.log ("Descuentos los dias Lunes, miercoles y viernes")
-}
-
-//Funcion iva
-function iva (precio){
-    let conIva = precio * 1.21;
-    return conIva;
-}
-
-class Producto {
-    constructor (nombre, marca, contenido, valor){
-        this.nombre = nombre.toUpperCase();
-        this.marca = marca;
-        this.contenido = contenido;
-        this.valor = valor;
+const productos = [ 
+    
+    {
+        nombre: "Fideos",
+        marca: "Lucchetti",
+        contenido: "500gr",
+        precio: 110
+    },
+    {
+        nombre: "Arroz",
+        marca: "Lucchetti",
+        contenido: "500gr",
+        precio: 120
+    },
+    {
+        nombre: "Harina",
+        marca: "Favorita",
+        contenido: "500gr",
+        precio: 100
+    },
+    {
+        nombre: "Yerba",
+        marca: "Rosamonte",
+        contenido: "500gr",
+        precio: 420
+    },
+    {
+        nombre: "Cafe",
+        marca: "Nestafe",
+        contenido: "170gr",
+        precio: 815
+    },
+    {
+        nombre: "Azucar",
+        marca: "Ledesma",
+        contenido: "500gr",
+        precio: 122
+    },
+    {
+        nombre: "Galletitas",
+        marca: "Bagley",
+        contenido: "500gr",
+        precio: 220
     }
-    iva(){
-        this.valor = this.valor *1.21
+]
+
+let carrito = [];
+
+const productosIva = productos.map((producto)=>{
+    return {
+        nombre: producto.nombre,
+        precio: producto.precio * 1.21
+    }
+}
+)
+
+
+console.table(productosIva);
+let producto = prompt ("Que producto estas buscando?" + "Presione la letra (s) si desea salir");
+let unidades = 0;
+
+while (producto != "s"){
+
+
+if ((producto == "fideos" || producto == "Fideos" || producto == "FIDEOS") || 
+    (producto == "arroz" || producto == "Arroz" || producto == "ARROZ") || 
+    (producto == "harina" || producto == "Harina" || producto == "HARINA") || 
+    (producto == "yerba" || producto == "Yerba" || producto == "YERBA") || 
+    (producto == "cafe" || producto == "Cafe" || producto == "CAFE") ||
+    (producto == "azucar" || producto == "Azucar" || producto == "AZUCAR") || 
+    (producto == "galletitas" || producto == "Galletitas" || producto == "GALLETITAS")) {
+    switch (producto){
+        case "FIDEOS":
+        case "Fideos":
+        case "fideos":
+            total = 133.1;
+            break;
+        case "ARROZ":
+        case "Arroz":
+        case "arroz":
+            total = 145.2;
+            break;
+        case "HARINA":
+        case "Harina":
+        case "harina":
+            total = 121;
+            break;
+        case "YERBA":
+        case "Yerba":
+        case "yerba":
+            total = 508.2;
+            break;       
+        case "CAFE":
+        case "Cafe":
+        case "cafe":
+            total = 986.15;
+            break;
+        case "AZUCAR":
+        case "Azucar":
+        case "azucar":
+            total = 147.62;
+            break;
+        case "GALLETITAS":
+        case "Galletitas":
+        case "galletitas ":
+            total = 266.2;
+            break;
+        default:
+            break;
+        } 
+        unidades = parseInt(prompt("Cuantas unidades desea llevar?"));
+        carrito.push({producto, unidades, total})
+        console.log (carrito)
+    } else {
+        console.log ("No contamos con ese producto.")
+    }
+    producto = prompt ("Desea elegir otro producto?" + "Presione la letra (s) si desea salir");
+
+    while (producto === "no"){
+        console.log ("Gracias por elegirnos")
+        carrito.forEach ((carritoTotal) =>{
+            console.log ('producto: ${carritoTotal.producto}, unidades: ${carritoTotal.unidades}, total a pagar: ${carritoTotal.unidades * carritoTotal.total}')
+        })
+        break;
     }
 }
 
-const productos = [];
-productos.push(new Producto("Fideos", "Lucchetti", "500gr", 110));
-productos.push(new Producto("Arroz", "Lucchetti", "500gr", 120));
-productos.push(new Producto("Harina", "Favorita", "500gr",100));
-productos.push(new Producto ("Yerba", "Rosamonte", "500gr", 420));
-productos.push(new Producto("Cafe","Nescafe", "170gr", 815));
-productos.push(new Producto("Azucar", "Ledesma", "500gr", 122));
-productos.push(new Producto("Galletitas", "Bagley", "500gr",220));
-
-for (const Producto of productos){
-    Producto.iva();
-}
-
-console.log("Que producto estas buscando? presione s para salir");
-for (const Producto of productos){
-    console.log(Producto.nombre + " (" + Producto.marca + ") $" + Producto.valor)
-}
-
+let final = carrito.reduce ((acc, el) => acc + el.unidades * el.total, 0);
+final = final.toFixed(2);
+console.log("El total a pagar es: $" + final)
 
